@@ -24,7 +24,7 @@ if not re.fullmatch('(-?\d+(\.\d+)?,\d+(\.\d+)?)|([a-zA-Z](\s*,?\s*\w+)*)', args
 
 center = args.center[0]
 center = re.sub('\s*,\s*', ',', center)
-center = re.sub('\s*', '+', center)
+center = re.sub('\s+', '+', center)
 
 size = 'x'.join(list(map(str, args.size)))
 
