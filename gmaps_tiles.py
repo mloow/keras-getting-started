@@ -49,10 +49,10 @@ center = center.strip()
 center = re.sub('\s*,\s*', ',', center)
 center = re.sub('\s+', '+', center)
 
-if args.size[0] % args.num_tiles != 0:
-    sys.exit('Width ({}) is not divisible by number of tiles ({})!'.format(args.size[0], args.num_tiles))
-if args.size[1] % args.num_tiles != 0:
-    sys.exit('Height ({}) is not divisible by number of tiles ({})!'.format(args.size[1], args.num_tiles))
+if args.size[0] % args.num_tiles[0] != 0:
+    sys.exit('Width ({}) is not divisible by number of tiles ({})!'.format(args.size[0], args.num_tiles[0]))
+if args.size[1] % args.num_tiles[0] != 0:
+    sys.exit('Height ({}) is not divisible by number of tiles ({})!'.format(args.size[1], args.num_tiles[0]))
 if not re.fullmatch('(-?\d+(\.\d+)?,-?\d+(\.\d+)?)|([\w,\s]*)', center):
     sys.exit('\'{}\' is not a valid value for location!'.format(center))
 if not args.dir:
@@ -76,19 +76,19 @@ url = base_url + urllib.parse.urlencode(url_vars)
 static_map = io.imread(url)
 static_map = np.array(static_map)
 static_map = static_map[:][:-watermark_h][:]
-tiles = tile_image(static_map, args.num_tiles)
+tiles = tile_image(static_map, args.num_tiles[0])
 
 if not args.no_save and not os.path.exists(args.dir[0]):
     os.makedirs(args.dir[0])
 
-for row in range(args.num_tiles):
-    for col in range(args.num_tiles):
-        index = row * args.num_tiles + col
+for row in range(args.num_tiles[0]):
+    for col in range(args.num_tiles[0]):
+        index = row * args.num_tiles[0] + col
         if not args.no_save:
             fname = '{}/{}_{}.png'.format(args.dir[0], center, index)
             matplotlib.image.imsave(fname, tiles[index])
         if args.plot == 'tiles' or args.plot == 'both':
-            plt.subplot(args.num_tiles, args.num_tiles, index + 1)
+            plt.subplot(args.num_tiles[0], args.num_tiles[0], index + 1)
             plt.imshow(tiles[index])    
 
 if args.plot == 'original' or args.plot == 'both' or args.no_save:
