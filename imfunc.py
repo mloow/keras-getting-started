@@ -13,6 +13,7 @@ parser.add_argument('--lbp',
 	                default=[8, 1])
 parser.add_argument('-d', '--dir', default='.', help='Image source directory')
 parser.add_argument('-o', '--output', default='out.csv', help='Output file')
+parser.add_argument('-a', '--append', action='store_true', help='Append output to output file')
 parser.add_argument('-l', '--label', nargs=1, default='no_label', help='A label to give the output')
 
 args = parser.parse_args()
@@ -27,7 +28,7 @@ for filename in os.listdir(args.dir):
 		rel_freq = list(map(lambda x: x / np.product(lbp.shape), counts))
 		results[os.path.abspath(filename)] = rel_freq
 
-with open(args.output, 'w', encoding='utf-8') as f:
+with open(args.output, 'a' if args.append else 'w', encoding='utf-8', newline='') as f:
 	writer = csv.writer(f, delimiter=',')
 	for key, res in results.items():
 		writer.writerow([key] + [args.label[0]] + res)
