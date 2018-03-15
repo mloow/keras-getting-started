@@ -1,6 +1,7 @@
+import sys
 import os
 
-key = 'AIzaSyChM6rH9h3djIHLDhe3Rw5TANjAcN7VnOk'
+key = sys.argv[1]
 
 cities = ['stockholm',
           'göteborg',

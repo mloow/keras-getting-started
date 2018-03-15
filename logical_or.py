@@ -11,13 +11,20 @@ import matplotlib.pyplot as plt
 
 # generate sample data for logical OR-gate
 def get_sample_data(num):
+
+    # generate random pairs of 0's and 1's
     input_data = np.random.random_integers(low=0, high=1, size=(num, 2))
+
+    # the desired output for each pair is 1 if there is atleast one 1 in the input, otherwise 0
     output_data = [int(any(x)) for x in input_data]
+
+    # add some noise
+    input_data = input_data + np.random.normal(scale=0.1, size=(num, 2))
     return input_data, output_data
 
 # generate training sets and test sets
-x_train, y_train = get_sample_data(100)
-x_test, y_test = get_sample_data(50)
+x_train, y_train = get_sample_data(200)
+x_test, y_test = get_sample_data(100)
 
 # instatiate the model
 model = Sequential()
@@ -25,7 +32,8 @@ model = Sequential()
 # add a layer (the only layer, the output layer) with one node.
 # we also specify the number of inputs to this layer.
 # since this is the only layer, the input dimension should correspond to the dimension of the input, i.e. 2
-model.add(Dense(units=1, activation='linear', input_dim=2))
+# we choose sigmoid for activation function
+model.add(Dense(units=1, activation='sigmoid', input_dim=2))
 
 # compile the model, using MSE as loss function, stochastic gradient descent as optimizer method, and accuracy as metric
 model.compile(loss='mean_squared_error',
@@ -33,7 +41,7 @@ model.compile(loss='mean_squared_error',
               metrics=['accuracy'])
 
 # define a early-stopping callback, which will halt the training when the loss function has not improved more than 0.001 for 10 consecutive epochs
-loss_stop = keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.001, patience=10, verbose=0, mode='auto')
+loss_stop = keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.001, patience=20, verbose=0, mode='auto')
 
 # fit the model to the training set, update weights after 10 samples, train for a maximum of 1000 epochs
 history = model.fit(x_train, y_train, epochs=1000, batch_size=10, callbacks=[loss_stop])
