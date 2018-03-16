@@ -40,7 +40,7 @@ model.compile(loss='mean_squared_error',
               optimizer='sgd',
               metrics=['accuracy'])
 
-# define a early-stopping callback, which will halt the training when the loss function has not improved more than 0.001 for 10 consecutive epochs
+# define a early-stopping callback, which will halt the training when the loss function has not improved more than 0.001 for 20 consecutive epochs
 loss_stop = keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.001, patience=20, verbose=0, mode='auto')
 
 # fit the model to the training set, update weights after 10 samples, train for a maximum of 1000 epochs
